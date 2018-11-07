@@ -1,18 +1,16 @@
-# import dependencies
+# dependencies
 from flask import Flask, render_template, jsonify, redirect
 import pymongo
 from pymongo import MongoClient
 import ScrapeMars
 
-# create instance of Flask 
+# create instance of Flask app
 app = Flask(__name__)
 
-# connect to mongodb
 conn = 'mongodb://localhost:27017'
 client = MongoClient("mongodb://localhost:27017")
 db = client.mars_db
 collection = db.mars_info
-
 
 @app.route("/")
 def index():
@@ -24,7 +22,7 @@ def index():
 @app.route("/scrape")
 def scrape():
     mars = db.mars_info
-    data= ScrapeMars.scrape()
+    data=ScrapeMars.scrape()
     mars.update({}, data, upsert=True)
 
     return redirect("http://localhost:5000/", code=302)

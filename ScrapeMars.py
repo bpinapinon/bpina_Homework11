@@ -1,10 +1,10 @@
-# Import Dependencies
-import pymongo
-import time
-from splinter import Browser
+# Dependencies
 import os
 from bs4 import BeautifulSoup as bs
 import requests
+import pymongo
+import time
+from splinter import Browser
 import pandas as pd
 
 
@@ -18,7 +18,7 @@ def scrape():
     mars_data = {}
 
 
-    # URL of page to scrape
+    # URL of page to be scraped
     url_news = 'https://mars.nasa.gov/news/'
     browser.visit(url_news)
     time.sleep(2)
@@ -27,17 +27,19 @@ def scrape():
     news_soup = bs(html, 'html.parser')
 
 
-    # Latest News Title
+    # latest news title
    
     titles = news_soup.find_all('div', class_='content_title')
     news_title = titles[0].text
     print(news_title)
    
 
-    # Latest News Paragraph
+    # latest news paragraph
     paragraphs = news_soup.find_all('div', class_="rollover_description_inner")
     news_p = paragraphs[0].text
     print(news_p)
+    
+
     
     mars_data['news_title'] = news_title
     mars_data['news_p'] = news_p
@@ -45,23 +47,21 @@ def scrape():
 
     ## Mars Featured Image
 
-    # URL of image
+    # URL of mars image
     url_images = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(url_images)
     
-    #sleep
+
     time.sleep(5)
 
   
     full_image_attr = browser.find_by_id('full_image')
     full_image_attr.click()
-    #sleep
     time.sleep(2)
-
+    
  
     more_info_attr = browser.find_link_by_partial_text('more info')
     more_info_attr.click()
-    #sleep
     time.sleep(2)
     
 
@@ -70,9 +70,10 @@ def scrape():
     
 
 
-    # Identify the relative image url  
+    # find the relative image url  
     rel_img_url = img_soup.find('figure', class_='lede').find('img')['src']
     rel_img_url
+
 
     base_link = 'https://www.jpl.nasa.gov'
     featured_image_url = base_link + rel_img_url
@@ -157,7 +158,7 @@ def scrape():
         time.sleep(5)
     
         soup = bs(browser.html, 'html.parser')
-        # print(soup)
+    
         result_image = soup.find('img', class_="wide-image")
         image = url_base + result_image["src"]
     
