@@ -23,11 +23,13 @@ def index():
 def scrape():
     mars = db.mars_info
     data=ScrapeMars.scrape()
+    #print(data)
     mars.update({}, data, upsert=True)
 
     return redirect("http://localhost:5000/", code=302)
 
 if __name__ == "__main__":
+    scrape()
     app.run(debug=True)
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
